@@ -1,0 +1,83 @@
+<head>
+    <style type="text/css">
+
+    .btn-highlight {
+        background-color: #ffcc00; /* Bright yellow for highlight */
+        color: #007bff; /* Your chosen blue color for text */
+        border: 2px solid #007bff; /* Blue border */
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+    
+    .btn-highlight:hover, .btn-highlight:focus {
+        background-color: #007bff; /* Blue for hover state */
+        color: #ffffff; /* White text on hover */
+        border-color: #0056b3; /* Slightly darker blue border on hover */
+    }
+    </style>
+</head>
+
+{% extends 'web/base.html'%}
+{% block body %}
+<div class="container">
+    <div class="col-xs-6 col-xs-offset-3">
+    	<form class="form-horizontal" role="search" method="get" action=''>
+         <div class="form-group">
+         <div class="input-group">	
+            <input type="text" class="form-control input-lg " name="q" value="{{ request.GET.q }}" placeholder= "Search Movies " style="margin-right: 20px;"/>
+            <span class='input-group-btn'>
+
+            <button class='btn btn-primary btn-lg' type='submit'>Search</button>
+            </button>
+         </span>
+        </div>
+     </div>
+   </form>
+
+ </div>
+</div>  
+    {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %} >{{ message }}</li>
+            {% endfor %}
+            </ul>
+    {% endif %}
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col text-center mt-3">
+            <a href="{% url 'recommend' %}" class="btn btn-highlight btn-lg">
+                <strong>Get Recommendation</strong>
+            </a>
+        </div>
+        
+    </div>
+	</div>
+	<div class="container-fluid">
+    
+    <!-- Movie list -->
+    <div class="row">
+            {% if movies %}
+            {% for movie in movies %}
+                <div class="col-sm-2 col-md-2 ">
+                    <div class="thumbnail">
+                        <h6>{{movie.title}}</h6>
+                        <a href="{% url 'detail' movie.id %}">
+                            <img src="{{ movie.movie_logo.url}}" class="img-responsive">
+                        </a>
+                        <h6>{{movie.genre}}</h6>
+                        <div class="caption">
+
+                            <!-- View Details -->
+                            <a href="{% url 'detail' movie.id %}" class="btn btn-primary btn-sm" role="button">Give Rating</a>
+
+                                        
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+        </div>
+    
+</div>
+
+{% endblock %}

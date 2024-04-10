@@ -1,0 +1,62 @@
+{% extends 'web/base.html' %}
+{% block title %}{{ movies.title }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <!-- Movie Info -->
+        <div class="col-md-10 col-lg-8 text-center">
+            <img src="{{ movies.movie_logo.url }}" class="img-fluid mb-4" alt="{{ movies.title }}" style="max-height: 400px;">
+            <h2 class="mb-2" style="padding: 10px;">{{ movies.title }}</h2>
+            <h4 class="text-muted mb-3">{{ movies.genre }}</h4>
+            <p class="lead" style="padding: 20px;">Have you watched this movie? Please rate to get recommendations.</p>
+        </div>
+    </div>
+    <!-- Rating Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            {% if messages %}
+            <div class="alert alert-info my-4">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <form class="form-inline justify-content-center" method="post" action="{% url 'detail' movies.id %}" onsubmit="return validateForm()" name="ratingForm">
+                {% csrf_token %}
+                <div class="star-rating mb-4" style="margin-right: 10px;">
+                    <span class="fa fa-star-o" data-rating="1"></span>
+                    <span class="fa fa-star-o" data-rating="2"></span>
+                    <span class="fa fa-star-o" data-rating="3"></span>
+                    <span class="fa fa-star-o" data-rating="4"></span>
+                    <span class="fa fa-star-o" data-rating="5"></span>
+                    <input type="hidden" name="rating" class="rating-value" value="0">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Submit Rating</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Similar Movies Section -->
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-10 text-center">
+            <h3>Similar Movies</h3>
+            <div class="row">
+                {% for similar_movie in similar_movies %}
+                <div class="col-md-4 mb-4">
+                    <div class="thumbnail">
+                        <a href="{% url 'detail' similar_movie.id %}">
+                            <img src="{{ similar_movie.movie_logo.url }}" class="img-fluid" alt="{{ similar_movie.title }}" style="max-height: 200px;">
+                            <div class="caption">
+                                <h7>{{ similar_movie.title }}</h7>
+                                <p>{{ similar_movie.genre }}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
